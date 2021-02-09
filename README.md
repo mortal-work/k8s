@@ -11,7 +11,7 @@ They can also communicate with each other using standard inter-process communica
 
 p.s.1: Приблизительный конфиг для minikube в директории .kube
 
-p.s.2: Для решения проблем в minikube c днс в корп. сеть без подключенного впн - таймауты при опросе (ибо на 20.00 resolved): 
+p.s.2: Для решения проблем в minikube c днс в корп. сеть без подключенного впн - таймауты при опросе (ибо на ubuntu 20.04 systemd-resolved): 
 
 To avoid a "Search Line limits were exceeded, some search paths have been omitted, the applied search line is"
 You should use ip adress for dns resolve
