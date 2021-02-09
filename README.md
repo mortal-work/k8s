@@ -8,6 +8,7 @@ They can also communicate with each other using standard inter-process communica
 
 Поэтому оставляю это решение, которое поддерживает scale. Несколько отлично от тз, но это задел именно в scale
 
+Запуск - **run.sh**
 
 p.s.1: Приблизительный конфиг для minikube в директории .kube
 
