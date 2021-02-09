@@ -1,0 +1,93 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redis
+spec:
+  selector:
+    matchLabels:
+      app: redis
+  serviceName: redis
+  replicas: 6
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      initContainers:
+      - name: init-redis
+        image: redis:6.0.10
+        command:
+        - bash
+        - "-c"
+        - |
+          set -ex
+          # Generate redis server-id from pod ordinal index.
+          [[ `hostname` =~ -([0-9]+)$ ]] || exit 1
+          ordinal=${BASH_REMATCH[1]}
+          # Copy appropriate conf.d files from config-map to emptyDir.
+          if [[ $ordinal -eq 0 ]]; then
+            cp /mnt/config-map/master.conf /etc/redis.conf
+          else
+            cp /mnt/config-map/slave.conf /etc/redis.conf
+          fi
+        volumeMounts:
+        - name: conf
+          mountPath: /etc
+          subPath: redis.conf
+        - name: config-map
+          mountPath: /mnt/config-map
+      volumes:
+      - name: config-map
+        configMap:
+          name: redis
+          defaultMode: 0755
+      - name: conf
+        emptyDir: {}
+
+      containers:
+      - name: redis
+        image: redis:6.0.10
+        command: ["redis-server"]
+        args: ["/etc/redis.conf"]
+        env:
+        - name: ALLOW_EMPTY_PASSWORD
+          value: "yes"
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        ports:
+        - name: redis
+          containerPort: 6379
+        - name: gossip
+          containerPort: 16379
+        volumeMounts:
+        - name: redis-data
+          mountPath: /data
+        - name: conf
+          mountPath: /etc/
+          subPath: redis.conf
+      volumes:
+      - name: config-map
+        configMap:
+          name: redis
+          defaultMode: 0755
+      - name: conf
+        emptyDir: {}
+#      dnsPolicy: "None"
+#      dnsConfig:
+#        searches:
+#        - s7.svc.cluster.local
+#        - svc.cluster.local
+#        - cluster.local
+
+  volumeClaimTemplates:
+  - metadata:
+      name: redis-data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
+

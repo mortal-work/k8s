@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis
+data:
+  master.conf: |
+    protected-mode no
+    port 6379
+    tcp-backlog 511
+    timeout 0
+    tcp-keepalive 300
+    daemonize no
+    supervised no
+    pidfile /var/run/redis_6379.pid
+    loglevel notice
+    logfile ""
+    appendonly yes
+  slave.conf: |
+    slaveof redis-0.redis 6379
+    loglevel notice
+    logfile ""
+    appendonly yes
+    daemonize no
+    supervised no
