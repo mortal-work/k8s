@@ -9,9 +9,12 @@
 
 Запуск - **run.sh**
 
-# Решение. ToDo
+# Решение
 Идеальный вариант для k8s - redis sentinel
 https://rtfm.co.ua/redis-replikaciya-chast-2-master-slave-replikaciya-i-redis-sentinel
+# ToDo
+1. Изменить configmap, добавить 3 вариант конфига - sentinel
+2. В statefulset в init изменить алгоритм конфигураций в зависимости от имени пода
 
 # p.s.
 p.s.1: Приблизительный конфиг для minikube в директории .kube
