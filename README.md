@@ -10,6 +10,10 @@ They can also communicate with each other using standard inter-process communica
 
 Запуск - **run.sh**
 
+# Решение. ToDo
+Идеальный вариант для k8s - redis sentinel
+https://rtfm.co.ua/redis-replikaciya-chast-2-master-slave-replikaciya-i-redis-sentinel
+
 p.s.1: Приблизительный конфиг для minikube в директории .kube
 
 p.s.2: Для решения проблем в minikube c днс в корп. сеть без подключенного впн - таймауты при опросе (ибо на ubuntu 20.04 systemd-resolved): 
